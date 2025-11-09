@@ -150,32 +150,230 @@
         button:active {
             transform: translateY(0);
         }
+
+        /* Écran de configuration */
+        .setup-screen {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            max-width: 500px;
+        }
+
+        .setup-screen h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .difficulty-selector {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .difficulty-selector label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .difficulty-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .difficulty-btn {
+            flex: 1;
+            padding: 15px 10px;
+            background: #f0f0f0;
+            color: #333;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.95em;
+        }
+
+        .difficulty-btn:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .difficulty-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .game-screen {
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎮 Puissance 4 🎮</h1>
 
-        <div class="game-info">
-            <span class="current-player">
-                Joueur actuel : <span id="playerName">Rouge</span>
-                <span class="player-indicator" id="playerIndicator" style="background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);"></span>
-            </span>
+        <!-- Écran de configuration -->
+        <div class="setup-screen" id="setupScreen">
+            <h2>Configuration de la partie</h2>
+
+            <div class="input-group">
+                <label for="player1Name">🔴 Pseudo Joueur 1 :</label>
+                <input type="text" id="player1Name" placeholder="Entrez votre pseudo" maxlength="15" value="Joueur 1">
+            </div>
+
+            <div class="input-group">
+                <label for="player2Name">🟡 Pseudo Joueur 2 :</label>
+                <input type="text" id="player2Name" placeholder="Entrez votre pseudo" maxlength="15" value="Joueur 2">
+            </div>
+
+            <div class="difficulty-selector">
+                <label>Difficulté :</label>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn selected" data-difficulty="easy">
+                        Facile<br>
+                        <small>6 × 7</small>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="normal">
+                        Normal<br>
+                        <small>6 × 9</small>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="hard">
+                        Difficile<br>
+                        <small>7 × 9</small>
+                    </button>
+                </div>
+            </div>
+
+            <button class="start-btn" onclick="startGame()">Commencer la partie</button>
         </div>
 
-        <div class="board" id="board"></div>
+        <!-- Écran de jeu -->
+        <div class="game-screen" id="gameScreen">
+            <div class="game-info">
+                <span class="current-player">
+                    Joueur actuel : <span id="playerName">Joueur 1</span>
+                    <span class="player-indicator" id="playerIndicator" style="background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);"></span>
+                </span>
+            </div>
 
-        <div class="message" id="message"></div>
+            <div class="board" id="board"></div>
 
-        <button onclick="resetGame()">Nouvelle Partie</button>
+            <div class="message" id="message"></div>
+
+            <button onclick="backToMenu()">Nouvelle Partie</button>
+        </div>
     </div>
 
     <script>
-        const ROWS = 6;
-        const COLS = 7;
+        // Variables de configuration
+        let ROWS = 6;
+        let COLS = 7;
+        let player1Name = 'Joueur 1';
+        let player2Name = 'Joueur 2';
+        let difficulty = 'easy';
+
+        // Variables de jeu
         let currentPlayer = 'red';
         let board = [];
         let gameOver = false;
+
+        // Gestion des boutons de difficulté
+        document.addEventListener('DOMContentLoaded', function() {
+            const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+            difficultyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    difficultyBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    difficulty = this.dataset.difficulty;
+                });
+            });
+        });
+
+        // Démarrer le jeu
+        function startGame() {
+            // Récupérer les pseudos
+            player1Name = document.getElementById('player1Name').value.trim() || 'Joueur 1';
+            player2Name = document.getElementById('player2Name').value.trim() || 'Joueur 2';
+
+            // Définir les dimensions selon la difficulté
+            switch(difficulty) {
+                case 'easy':
+                    ROWS = 6;
+                    COLS = 7;
+                    break;
+                case 'normal':
+                    ROWS = 6;
+                    COLS = 9;
+                    break;
+                case 'hard':
+                    ROWS = 7;
+                    COLS = 9;
+                    break;
+            }
+
+            // Basculer vers l'écran de jeu
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+
+            // Initialiser le plateau
+            initBoard();
+        }
+
+        // Retour au menu
+        function backToMenu() {
+            document.getElementById('setupScreen').style.display = 'block';
+            document.getElementById('gameScreen').style.display = 'none';
+        }
 
         // Initialiser le plateau
         function initBoard() {
@@ -211,10 +409,10 @@
             const playerIndicator = document.getElementById('playerIndicator');
 
             if (currentPlayer === 'red') {
-                playerName.textContent = 'Rouge';
+                playerName.textContent = player1Name + ' 🔴';
                 playerIndicator.style.background = 'radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a)';
             } else {
-                playerName.textContent = 'Jaune';
+                playerName.textContent = player2Name + ' 🟡';
                 playerIndicator.style.background = 'radial-gradient(circle at 30% 30%, #ffd43b, #f59f00)';
             }
         }
@@ -233,9 +431,10 @@
                     // Vérifier la victoire
                     if (checkWin(row, col)) {
                         gameOver = true;
-                        const winner = currentPlayer === 'red' ? 'Rouge' : 'Jaune';
+                        const winner = currentPlayer === 'red' ? player1Name : player2Name;
+                        const emoji = currentPlayer === 'red' ? '🔴' : '🟡';
                         const message = document.getElementById('message');
-                        message.textContent = `🎉 Le joueur ${winner} a gagné ! 🎉`;
+                        message.textContent = `🎉 ${winner} ${emoji} a gagné ! 🎉`;
                         message.className = 'message winner';
                         return;
                     }
@@ -309,13 +508,6 @@
             return true;
         }
 
-        // Réinitialiser le jeu
-        function resetGame() {
-            initBoard();
-        }
-
-        // Initialiser le jeu au chargement
-        initBoard();
     </script>
 </body>
 </html>
