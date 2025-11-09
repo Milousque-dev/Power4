@@ -256,6 +256,63 @@
         .hidden {
             display: none;
         }
+
+        /* Sélecteur d'avatars */
+        .avatar-selector {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .avatar-selector label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .avatar-option {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-size: cover;
+            background-position: center;
+            background-color: white;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+            border-color: #999;
+        }
+
+        .avatar-option.selected {
+            border-color: #667eea;
+            border-width: 4px;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Styles pour les pions avec images */
+        .cell.player1, .cell.player2 {
+            background-size: 90%;
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: default;
+        }
+
+        .cell.player1:hover, .cell.player2:hover {
+            transform: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
@@ -271,9 +328,37 @@
                 <input type="text" id="player1Name" placeholder="Entrez votre pseudo" maxlength="15" value="Joueur 1">
             </div>
 
+            <div class="avatar-selector">
+                <label>Avatar Joueur 1 :</label>
+                <div class="avatar-grid" id="player1Avatars">
+                    <div class="avatar-option selected" data-avatar="pion1" style="background-image: url('images/pion1.png')"></div>
+                    <div class="avatar-option" data-avatar="pion2" style="background-image: url('images/pion2.png')"></div>
+                    <div class="avatar-option" data-avatar="pion3" style="background-image: url('images/pion3.png')"></div>
+                    <div class="avatar-option" data-avatar="pion4" style="background-image: url('images/pion4.png')"></div>
+                    <div class="avatar-option" data-avatar="pion5" style="background-image: url('images/pion5.png')"></div>
+                    <div class="avatar-option" data-avatar="pion6" style="background-image: url('images/pion6.png')"></div>
+                    <div class="avatar-option" data-avatar="pion7" style="background-image: url('images/pion7.png')"></div>
+                    <div class="avatar-option" data-avatar="pion8" style="background-image: url('images/pion8.png')"></div>
+                </div>
+            </div>
+
             <div class="input-group">
                 <label for="player2Name">🟡 Pseudo Joueur 2 :</label>
                 <input type="text" id="player2Name" placeholder="Entrez votre pseudo" maxlength="15" value="Joueur 2">
+            </div>
+
+            <div class="avatar-selector">
+                <label>Avatar Joueur 2 :</label>
+                <div class="avatar-grid" id="player2Avatars">
+                    <div class="avatar-option" data-avatar="pion1" style="background-image: url('images/pion1.png')"></div>
+                    <div class="avatar-option selected" data-avatar="pion2" style="background-image: url('images/pion2.png')"></div>
+                    <div class="avatar-option" data-avatar="pion3" style="background-image: url('images/pion3.png')"></div>
+                    <div class="avatar-option" data-avatar="pion4" style="background-image: url('images/pion4.png')"></div>
+                    <div class="avatar-option" data-avatar="pion5" style="background-image: url('images/pion5.png')"></div>
+                    <div class="avatar-option" data-avatar="pion6" style="background-image: url('images/pion6.png')"></div>
+                    <div class="avatar-option" data-avatar="pion7" style="background-image: url('images/pion7.png')"></div>
+                    <div class="avatar-option" data-avatar="pion8" style="background-image: url('images/pion8.png')"></div>
+                </div>
             </div>
 
             <div class="difficulty-selector">
@@ -302,7 +387,7 @@
             <div class="game-info">
                 <span class="current-player">
                     Joueur actuel : <span id="playerName">Joueur 1</span>
-                    <span class="player-indicator" id="playerIndicator" style="background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);"></span>
+                    <span class="player-indicator" id="playerIndicator"></span>
                 </span>
             </div>
 
@@ -320,6 +405,8 @@
         let COLS = 7;
         let player1Name = 'Joueur 1';
         let player2Name = 'Joueur 2';
+        let player1Avatar = 'pion1';
+        let player2Avatar = 'pion2';
         let difficulty = 'easy';
 
         // Variables de jeu
@@ -327,14 +414,35 @@
         let board = [];
         let gameOver = false;
 
-        // Gestion des boutons de difficulté
+        // Gestion des boutons de difficulté et avatars
         document.addEventListener('DOMContentLoaded', function() {
+            // Gestion de la difficulté
             const difficultyBtns = document.querySelectorAll('.difficulty-btn');
             difficultyBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     difficultyBtns.forEach(b => b.classList.remove('selected'));
                     this.classList.add('selected');
                     difficulty = this.dataset.difficulty;
+                });
+            });
+
+            // Gestion des avatars Joueur 1
+            const player1AvatarBtns = document.querySelectorAll('#player1Avatars .avatar-option');
+            player1AvatarBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    player1AvatarBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    player1Avatar = this.dataset.avatar;
+                });
+            });
+
+            // Gestion des avatars Joueur 2
+            const player2AvatarBtns = document.querySelectorAll('#player2Avatars .avatar-option');
+            player2AvatarBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    player2AvatarBtns.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    player2Avatar = this.dataset.avatar;
                 });
             });
         });
@@ -409,11 +517,15 @@
             const playerIndicator = document.getElementById('playerIndicator');
 
             if (currentPlayer === 'red') {
-                playerName.textContent = player1Name + ' 🔴';
-                playerIndicator.style.background = 'radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a)';
+                playerName.textContent = player1Name;
+                playerIndicator.style.backgroundImage = `url('images/${player1Avatar}.png')`;
+                playerIndicator.style.backgroundSize = 'cover';
+                playerIndicator.style.backgroundPosition = 'center';
             } else {
-                playerName.textContent = player2Name + ' 🟡';
-                playerIndicator.style.background = 'radial-gradient(circle at 30% 30%, #ffd43b, #f59f00)';
+                playerName.textContent = player2Name;
+                playerIndicator.style.backgroundImage = `url('images/${player2Avatar}.png')`;
+                playerIndicator.style.backgroundSize = 'cover';
+                playerIndicator.style.backgroundPosition = 'center';
             }
         }
 
@@ -426,15 +538,22 @@
                 if (board[row][col] === null) {
                     board[row][col] = currentPlayer;
                     const cell = document.getElementById(`cell-${row}-${col}`);
-                    cell.classList.add(currentPlayer);
+
+                    // Appliquer l'image du pion
+                    if (currentPlayer === 'red') {
+                        cell.classList.add('player1');
+                        cell.style.backgroundImage = `url('images/${player1Avatar}.png')`;
+                    } else {
+                        cell.classList.add('player2');
+                        cell.style.backgroundImage = `url('images/${player2Avatar}.png')`;
+                    }
 
                     // Vérifier la victoire
                     if (checkWin(row, col)) {
                         gameOver = true;
                         const winner = currentPlayer === 'red' ? player1Name : player2Name;
-                        const emoji = currentPlayer === 'red' ? '🔴' : '🟡';
                         const message = document.getElementById('message');
-                        message.textContent = `🎉 ${winner} ${emoji} a gagné ! 🎉`;
+                        message.textContent = `🎉 ${winner} a gagné ! 🎉`;
                         message.className = 'message winner';
                         return;
                     }
