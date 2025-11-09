@@ -1,0 +1,145 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.game-info {
+    background: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.current-player {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #333;
+}
+
+.player-indicator {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-left: 10px;
+    vertical-align: middle;
+    border: 2px solid #333;
+}
+
+.board {
+    background: #0066cc;
+    padding: 15px;
+    border-radius: 15px;
+    display: inline-block;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.column {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 2px;
+}
+
+.cell {
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 50%;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.cell:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255,255,255,0.5);
+}
+
+.cell.player1 {
+    background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);
+    cursor: default;
+}
+
+.cell.player2 {
+    background: radial-gradient(circle at 30% 30%, #ffd43b, #f59f00);
+    cursor: default;
+}
+
+.cell.player1:hover, .cell.player2:hover {
+    transform: none;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.message {
+    background: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.message.winner {
+    background: #51cf66;
+    color: white;
+    animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+button {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1em;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+button:active {
+    transform: translateY(0);
+}
