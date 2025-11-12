@@ -87,17 +87,15 @@
             box-shadow: 0 0 15px rgba(255,255,255,0.5);
         }
 
-        .cell.red {
-            background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);
+        .cell.player1,
+        .cell.player2 {
+            background: white;
             cursor: default;
+            padding: 0;
         }
 
-        .cell.yellow {
-            background: radial-gradient(circle at 30% 30%, #ffd43b, #f59f00);
-            cursor: default;
-        }
-
-        .cell.red:hover, .cell.yellow:hover {
+        .cell.player1:hover,
+        .cell.player2:hover {
             transform: none;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
         }
@@ -150,38 +148,213 @@
         button:active {
             transform: translateY(0);
         }
+
+        /* Styles pour la sélection des skins */
+        .skin-selection {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .selection-panel h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .player-selection {
+            margin-bottom: 30px;
+        }
+
+        .player-selection h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .skin-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .skin-option {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            border: 4px solid transparent;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .skin-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .skin-option.selected {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .skin-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .start-button {
+            background: #667eea;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            margin-top: 20px;
+        }
+
+        .start-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .start-button:disabled:hover {
+            transform: none;
+        }
+
+        /* Styles pour les jetons avec images */
+        .cell.player1 img,
+        .cell.player2 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎮 Puissance 4 🎮</h1>
 
-        <div class="game-info">
-            <span class="current-player">
-                Joueur actuel : <span id="playerName">Rouge</span>
-                <span class="player-indicator" id="playerIndicator" style="background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);"></span>
-            </span>
+        <!-- Écran de sélection des skins -->
+        <div id="skinSelection" class="skin-selection">
+            <div class="selection-panel">
+                <h2>Sélection des jetons</h2>
+
+                <div class="player-selection">
+                    <h3>Joueur 1</h3>
+                    <div class="skin-options" id="player1Skins">
+                        <div class="skin-option" data-skin="skin1">
+                            <img src="static/tokens/skin1/player1.png" alt="Skin 1">
+                        </div>
+                        <div class="skin-option" data-skin="skin2">
+                            <img src="static/tokens/skin2/player1.png" alt="Skin 2">
+                        </div>
+                        <div class="skin-option" data-skin="skin3">
+                            <img src="static/tokens/skin3/player1.png" alt="Skin 3">
+                        </div>
+                        <div class="skin-option" data-skin="skin4">
+                            <img src="static/tokens/skin4/player1.png" alt="Skin 4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="player-selection">
+                    <h3>Joueur 2</h3>
+                    <div class="skin-options" id="player2Skins">
+                        <div class="skin-option" data-skin="skin1">
+                            <img src="static/tokens/skin1/player2.png" alt="Skin 1">
+                        </div>
+                        <div class="skin-option" data-skin="skin2">
+                            <img src="static/tokens/skin2/player2.png" alt="Skin 2">
+                        </div>
+                        <div class="skin-option" data-skin="skin3">
+                            <img src="static/tokens/skin3/player2.png" alt="Skin 3">
+                        </div>
+                        <div class="skin-option" data-skin="skin4">
+                            <img src="static/tokens/skin4/player2.png" alt="Skin 4">
+                        </div>
+                    </div>
+                </div>
+
+                <button id="startGame" class="start-button" disabled>Commencer la partie</button>
+            </div>
         </div>
 
-        <div class="board" id="board"></div>
+        <!-- Écran de jeu -->
+        <div id="gameScreen" style="display: none;">
+            <div class="game-info">
+                <span class="current-player">
+                    Joueur actuel : <span id="playerName">Joueur 1</span>
+                    <span class="player-indicator" id="playerIndicator"></span>
+                </span>
+            </div>
 
-        <div class="message" id="message"></div>
+            <div class="board" id="board"></div>
 
-        <button onclick="resetGame()">Nouvelle Partie</button>
+            <div class="message" id="message"></div>
+
+            <button onclick="resetGame()">Nouvelle Partie</button>
+        </div>
     </div>
 
     <script>
         const ROWS = 6;
         const COLS = 7;
-        let currentPlayer = 'red';
+        let currentPlayer = 'player1';
         let board = [];
         let gameOver = false;
+        let selectedSkins = {
+            player1: null,
+            player2: null
+        };
+
+        // Gestion de la sélection des skins
+        document.addEventListener('DOMContentLoaded', function() {
+            const player1Options = document.querySelectorAll('#player1Skins .skin-option');
+            const player2Options = document.querySelectorAll('#player2Skins .skin-option');
+            const startButton = document.getElementById('startGame');
+
+            player1Options.forEach(option => {
+                option.addEventListener('click', function() {
+                    player1Options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedSkins.player1 = this.dataset.skin;
+                    checkIfReady();
+                });
+            });
+
+            player2Options.forEach(option => {
+                option.addEventListener('click', function() {
+                    player2Options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedSkins.player2 = this.dataset.skin;
+                    checkIfReady();
+                });
+            });
+
+            function checkIfReady() {
+                if (selectedSkins.player1 && selectedSkins.player2) {
+                    startButton.disabled = false;
+                }
+            }
+
+            startButton.addEventListener('click', function() {
+                document.getElementById('skinSelection').style.display = 'none';
+                document.getElementById('gameScreen').style.display = 'block';
+                initBoard();
+            });
+        });
 
         // Initialiser le plateau
         function initBoard() {
             board = Array(ROWS).fill(null).map(() => Array(COLS).fill(null));
             gameOver = false;
-            currentPlayer = 'red';
+            currentPlayer = 'player1';
             updatePlayerDisplay();
             document.getElementById('message').textContent = '';
             document.getElementById('message').className = 'message';
@@ -210,12 +383,12 @@
             const playerName = document.getElementById('playerName');
             const playerIndicator = document.getElementById('playerIndicator');
 
-            if (currentPlayer === 'red') {
-                playerName.textContent = 'Rouge';
-                playerIndicator.style.background = 'radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a)';
+            if (currentPlayer === 'player1') {
+                playerName.textContent = 'Joueur 1';
+                playerIndicator.innerHTML = `<img src="static/tokens/${selectedSkins.player1}/player1.png" style="width: 25px; height: 25px; border-radius: 50%; vertical-align: middle; border: 2px solid #333;">`;
             } else {
-                playerName.textContent = 'Jaune';
-                playerIndicator.style.background = 'radial-gradient(circle at 30% 30%, #ffd43b, #f59f00)';
+                playerName.textContent = 'Joueur 2';
+                playerIndicator.innerHTML = `<img src="static/tokens/${selectedSkins.player2}/player2.png" style="width: 25px; height: 25px; border-radius: 50%; vertical-align: middle; border: 2px solid #333;">`;
             }
         }
 
@@ -230,12 +403,21 @@
                     const cell = document.getElementById(`cell-${row}-${col}`);
                     cell.classList.add(currentPlayer);
 
+                    // Ajouter l'image du jeton
+                    const img = document.createElement('img');
+                    if (currentPlayer === 'player1') {
+                        img.src = `static/tokens/${selectedSkins.player1}/player1.png`;
+                    } else {
+                        img.src = `static/tokens/${selectedSkins.player2}/player2.png`;
+                    }
+                    cell.appendChild(img);
+
                     // Vérifier la victoire
                     if (checkWin(row, col)) {
                         gameOver = true;
-                        const winner = currentPlayer === 'red' ? 'Rouge' : 'Jaune';
+                        const winner = currentPlayer === 'player1' ? 'Joueur 1' : 'Joueur 2';
                         const message = document.getElementById('message');
-                        message.textContent = `🎉 Le joueur ${winner} a gagné ! 🎉`;
+                        message.textContent = `🎉 Le ${winner} a gagné ! 🎉`;
                         message.className = 'message winner';
                         return;
                     }
@@ -248,7 +430,7 @@
                     }
 
                     // Changer de joueur
-                    currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+                    currentPlayer = currentPlayer === 'player1' ? 'player2' : 'player1';
                     updatePlayerDisplay();
                     return;
                 }
@@ -311,11 +493,15 @@
 
         // Réinitialiser le jeu
         function resetGame() {
-            initBoard();
-        }
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('skinSelection').style.display = 'block';
 
-        // Initialiser le jeu au chargement
-        initBoard();
+            // Réinitialiser les sélections
+            document.querySelectorAll('.skin-option').forEach(opt => opt.classList.remove('selected'));
+            selectedSkins.player1 = null;
+            selectedSkins.player2 = null;
+            document.getElementById('startGame').disabled = true;
+        }
     </script>
 </body>
 </html>
