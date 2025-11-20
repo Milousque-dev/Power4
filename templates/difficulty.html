@@ -1,0 +1,142 @@
+<!--
+    ============================================================================
+    PUISSANCE 4 - PAGE DE SÉLECTION DE DIFFICULTÉ
+    ============================================================================
+
+    Cette page est le point d'entrée du jeu. Elle permet au joueur de choisir
+    la difficulté qui déterminera la taille du plateau de jeu.
+
+    Flux de navigation:
+    1. Utilisateur arrive sur cette page (/)
+    2. Choisit une difficulté (Facile, Normal, Difficile)
+    3. La difficulté et les dimensions sont sauvegardées dans sessionStorage
+    4. Redirection automatique vers /skins
+
+    Difficultés disponibles:
+    - FACILE   : Grille 6x7 avec 3 jetons pré-remplis
+    - NORMAL   : Grille 6x9 avec 5 jetons pré-remplis
+    - DIFFICILE: Grille 7x8 avec 7 jetons pré-remplis
+    ============================================================================
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- ===== EN-TÊTE DU DOCUMENT ===== -->
+
+    <!-- Encodage de caractères UTF-8 pour supporter les accents -->
+    <meta charset="UTF-8">
+
+    <!-- Configuration du viewport pour responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Titre affiché dans l'onglet du navigateur -->
+    <title>Puissance 4 - Difficulté</title>
+
+    <!-- Lien vers la feuille de styles CSS principale -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- ===== CONTENEUR PRINCIPAL ===== -->
+    <div class="container">
+
+        <!-- ===== SECTION DE SÉLECTION DE DIFFICULTÉ ===== -->
+        <!-- ID utilisé par JavaScript si besoin, classe pour le styling CSS -->
+        <div id="difficultySelection" class="difficulty-selection">
+
+            <!-- Titre principal de la page -->
+            <h2>Choisissez la difficulté</h2>
+
+            <!-- Conteneur des 3 options de difficulté -->
+            <div class="difficulty-options">
+
+                <!-- ===== OPTION FACILE ===== -->
+                <!--
+                    Classe "easy" pour le styling spécifique (couleur orange)
+                    onclick: appelle selectDifficulty('easy') au clic
+                -->
+                <div class="difficulty-option easy" onclick="selectDifficulty('easy')">
+                    FACILE
+                    <!-- Sous-texte indiquant les dimensions de la grille -->
+                    <div class="difficulty-info">Grille 6x7</div>
+                </div>
+
+                <!-- ===== OPTION NORMAL ===== -->
+                <!--
+                    Classe "normal" pour le styling spécifique (couleur verte)
+                    onclick: appelle selectDifficulty('normal') au clic
+                -->
+                <div class="difficulty-option normal" onclick="selectDifficulty('normal')">
+                    NORMAL
+                    <!-- Sous-texte indiquant les dimensions de la grille -->
+                    <div class="difficulty-info">Grille 6x9</div>
+                </div>
+
+                <!-- ===== OPTION DIFFICILE ===== -->
+                <!--
+                    Classe "hard" pour le styling spécifique (couleur rose)
+                    onclick: appelle selectDifficulty('hard') au clic
+                -->
+                <div class="difficulty-option hard" onclick="selectDifficulty('hard')">
+                    DIFFICILE
+                    <!-- Sous-texte indiquant les dimensions de la grille -->
+                    <div class="difficulty-info">Grille 7x8</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SCRIPT JAVASCRIPT INLINE ===== -->
+    <!--
+        Ce script gère la sélection de difficulté et la navigation
+        Il est inline car il est spécifique à cette page
+    -->
+    <script>
+        /**
+         * Gère la sélection d'une difficulté
+         *
+         * Cette fonction est appelée lorsque l'utilisateur clique sur une option.
+         * Elle effectue les actions suivantes:
+         * 1. Applique la classe CSS correspondant à la difficulté sur le body
+         * 2. Détermine les dimensions de la grille selon la difficulté
+         * 3. Sauvegarde ces informations dans sessionStorage
+         * 4. Redirige vers la page de sélection des skins
+         *
+         * @param {string} difficulty - Difficulté choisie ('easy', 'normal', ou 'hard')
+         */
+        function selectDifficulty(difficulty) {
+            // Application du thème visuel (fond d'écran) correspondant
+            // Ajoute la classe 'easy', 'normal' ou 'hard' au body
+            document.body.className = difficulty;
+
+            // Déclaration des variables pour les dimensions
+            let rows, cols;
+
+            // Détermination des dimensions selon la difficulté
+            switch(difficulty) {
+                case 'easy':
+                    rows = 6;  // 6 lignes
+                    cols = 7;  // 7 colonnes
+                    break;
+                case 'normal':
+                    rows = 6;  // 6 lignes
+                    cols = 9;  // 9 colonnes
+                    break;
+                case 'hard':
+                    rows = 7;  // 7 lignes
+                    cols = 8;  // 8 colonnes
+                    break;
+            }
+
+            // Sauvegarde dans sessionStorage (persistera pendant la session du navigateur)
+            // Ces données seront récupérées par les pages suivantes
+            sessionStorage.setItem('difficulty', difficulty);  // 'easy', 'normal' ou 'hard'
+            sessionStorage.setItem('rows', rows);              // Nombre de lignes
+            sessionStorage.setItem('cols', cols);              // Nombre de colonnes
+
+            // Redirection vers la page de sélection des skins et pseudos
+            window.location.href = '/skins';
+        }
+    </script>
+</body>
+</html>

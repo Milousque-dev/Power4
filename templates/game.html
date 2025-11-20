@@ -1,0 +1,160 @@
+<!--
+    ============================================================================
+    PUISSANCE 4 - PAGE DE JEU PRINCIPALE
+    ============================================================================
+
+    Cette page affiche le plateau de jeu et gère toute la partie.
+
+    Fonctionnalités:
+    - Affichage dynamique du plateau (créé par JavaScript)
+    - Indication du joueur actuel avec son pseudo et son jeton
+    - Animation de chute des jetons
+    - Indicateur de gravité inversée (tous les 5 tours)
+    - Détection de victoire / égalité
+    - Feux d'artifice en cas de victoire
+    - Bouton "Nouvelle Partie" pour recommencer
+
+    Flux de navigation:
+    1. Arrivée depuis /skins (après sélection skins et pseudos)
+    2. JavaScript charge les données depuis sessionStorage
+    3. JavaScript crée le plateau via l'API backend
+    4. Les joueurs jouent à tour de rôle
+    5. Affichage du résultat en fin de partie
+    6. "Nouvelle Partie" renvoie vers /
+
+    Fichiers JavaScript chargés:
+    - game.js : Logique principale du jeu et communication API
+    - fireworks.js : Animation des feux d'artifice
+    ============================================================================
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- ===== EN-TÊTE DU DOCUMENT ===== -->
+
+    <!-- Encodage UTF-8 -->
+    <meta charset="UTF-8">
+
+    <!-- Configuration responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Titre de la page -->
+    <title>Puissance 4 - Jeu</title>
+
+    <!-- Lien vers les styles CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- ===== CONTENEUR PRINCIPAL ===== -->
+    <div class="container">
+
+        <!-- ===== SECTION DU JEU ===== -->
+        <div id="gameScreen">
+
+            <!-- ===== INDICATEUR DE GRAVITÉ INVERSÉE ===== -->
+            <!--
+                Cet indicateur est affiché uniquement quand la gravité est inversée
+                (tous les 5 tours, les jetons tombent vers le haut)
+
+                JavaScript ajoute la classe "inverse-gravity" au body pour l'afficher
+                CSS: display: none par défaut, display: block quand body.inverse-gravity
+            -->
+            <div id="gravityIndicator">⬆️ GRAVITÉ INVERSÉE ⬆️</div>
+
+            <!-- ===== BARRE D'INFORMATION DU JOUEUR ACTUEL ===== -->
+            <!--
+                Affiche en temps réel:
+                - Le pseudo du joueur dont c'est le tour
+                - Une icône de son jeton (skin choisi)
+
+                Mis à jour par JavaScript après chaque coup
+            -->
+            <div class="game-info">
+                <span class="current-player">
+                    Joueur actuel : <span id="playerName">Joueur 1</span>
+                    <!--
+                        Conteneur pour l'icône du jeton du joueur actuel
+                        JavaScript y injecte une balise <img> avec le skin approprié
+                    -->
+                    <span class="player-indicator" id="playerIndicator"></span>
+                </span>
+            </div>
+
+            <!-- ===== PLATEAU DE JEU ===== -->
+            <!--
+                Ce conteneur est initialement vide
+                JavaScript le remplit dynamiquement avec:
+                - Une div.column pour chaque colonne
+                - Une div.cell pour chaque case
+                - Des balises <img> pour les jetons placés
+
+                Structure générée par JavaScript:
+                <div class="board" id="board">
+                    <div class="column" onclick="dropPiece(0)">
+                        <div class="cell" id="cell-0-0"></div>
+                        <div class="cell" id="cell-1-0"></div>
+                        ...
+                    </div>
+                    <div class="column" onclick="dropPiece(1)">
+                        ...
+                    </div>
+                    ...
+                </div>
+            -->
+            <div class="board" id="board"></div>
+
+            <!-- ===== ZONE DE MESSAGE ===== -->
+            <!--
+                Affiche les messages de fin de partie:
+                - Victoire: "Bien vue [gagnant], t'a bien soulevé le daron chauve de [perdant]"
+                - Égalité: "⚖️ Match nul ! ⚖️"
+
+                Vide pendant la partie
+                JavaScript y ajoute du contenu et la classe "winner" en cas de victoire
+            -->
+            <div class="message" id="message"></div>
+
+            <!-- ===== BOUTON NOUVELLE PARTIE ===== -->
+            <!--
+                onclick="resetGame()" : appelle la fonction JavaScript
+                La fonction efface sessionStorage et redirige vers /
+            -->
+            <button onclick="resetGame()">Nouvelle Partie</button>
+        </div>
+    </div>
+
+    <!-- ===== CONTENEUR DES FEUX D'ARTIFICE ===== -->
+    <!--
+        Conteneur plein écran (position: fixed) pour les particules
+        JavaScript y ajoute dynamiquement des div.firework en cas de victoire
+
+        pointer-events: none permet de cliquer à travers les particules
+        z-index: 1000 assure que les feux sont au-dessus du reste
+    -->
+    <div id="fireworks" class="fireworks"></div>
+
+    <!-- ===== SCRIPTS JAVASCRIPT EXTERNES ===== -->
+
+    <!-- Script principal du jeu -->
+    <!--
+        game.js contient:
+        - Communication avec l'API backend (/api/game/new, /api/game/drop)
+        - Création du plateau HTML
+        - Gestion des clics et placement de jetons
+        - Animations de chute
+        - Détection de fin de partie
+        - Fonction resetGame()
+    -->
+    <script src="/js/game.js"></script>
+
+    <!-- Script des feux d'artifice -->
+    <!--
+        fireworks.js contient:
+        - Fonction createFireworks() appelée en cas de victoire
+        - Génération de particules colorées
+        - Animation d'explosion circulaire
+        - Système en 3 phases (salve initiale, continu, arrêt)
+    -->
+    <script src="/js/fireworks.js"></script>
+</body>
+</html>

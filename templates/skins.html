@@ -1,0 +1,201 @@
+<!--
+    ============================================================================
+    PUISSANCE 4 - PAGE DE SÉLECTION DES SKINS ET PSEUDOS
+    ============================================================================
+
+    Cette page permet aux deux joueurs de:
+    1. Entrer leur pseudo
+    2. Choisir leur skin de jeton (parmi 8 disponibles)
+
+    Validations effectuées:
+    - Les deux joueurs doivent avoir des skins différents
+    - Les deux joueurs doivent avoir des pseudos différents (insensible à la casse)
+    - Tous les champs doivent être remplis
+
+    Flux de navigation:
+    1. Arrivée depuis /difficulty (après sélection difficulté)
+    2. Sélection des skins et saisie des pseudos
+    3. Validation en temps réel
+    4. Redirection vers /game une fois tout validé
+
+    Données sauvegardées dans sessionStorage:
+    - player1Skin, player2Skin (ex: "skin1", "skin2")
+    - player1Pseudo, player2Pseudo
+    ============================================================================
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- ===== EN-TÊTE DU DOCUMENT ===== -->
+
+    <!-- Encodage de caractères UTF-8 -->
+    <meta charset="UTF-8">
+
+    <!-- Configuration responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Titre de la page -->
+    <title>Puissance 4 - Sélection</title>
+
+    <!-- Lien vers les styles CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- ===== CONTENEUR PRINCIPAL ===== -->
+    <div class="container">
+
+        <!-- ===== SECTION DE SÉLECTION DES SKINS ===== -->
+        <div id="skinSelection" class="skin-selection">
+            <div class="selection-panel">
+
+                <!-- Titre principal -->
+                <h2>Sélection des jetons</h2>
+
+                <!-- ===== SECTION JOUEUR 1 ===== -->
+                <div class="player-selection">
+                    <!-- Titre de la section joueur 1 -->
+                    <h3>Joueur 1</h3>
+
+                    <!-- Champ de saisie du pseudo -->
+                    <!--
+                        type="text" : champ texte
+                        id="player1Pseudo" : identifiant utilisé par JavaScript
+                        class="pseudo-input" : classe pour le styling CSS
+                        placeholder : texte d'aide affiché quand le champ est vide
+                        maxlength="20" : limite à 20 caractères
+                    -->
+                    <input type="text" id="player1Pseudo" class="pseudo-input"
+                           placeholder="Entrez votre pseudo..." maxlength="20">
+
+                    <!-- Grille des 8 skins disponibles pour le joueur 1 -->
+                    <!--
+                        Chaque skin est une div cliquable avec:
+                        - data-skin : attribut personnalisé contenant le nom du skin
+                        - Une image du skin
+                    -->
+                    <div class="skin-options" id="player1Skins">
+                        <!-- Skin 1 -->
+                        <div class="skin-option" data-skin="skin1">
+                            <img src="/static/tokens/skin1.png" alt="Skin 1">
+                        </div>
+                        <!-- Skin 2 -->
+                        <div class="skin-option" data-skin="skin2">
+                            <img src="/static/tokens/skin2.png" alt="Skin 2">
+                        </div>
+                        <!-- Skin 3 -->
+                        <div class="skin-option" data-skin="skin3">
+                            <img src="/static/tokens/skin3.png" alt="Skin 3">
+                        </div>
+                        <!-- Skin 4 -->
+                        <div class="skin-option" data-skin="skin4">
+                            <img src="/static/tokens/skin4.png" alt="Skin 4">
+                        </div>
+                        <!-- Skin 5 -->
+                        <div class="skin-option" data-skin="skin5">
+                            <img src="/static/tokens/skin5.png" alt="Skin 5">
+                        </div>
+                        <!-- Skin 6 -->
+                        <div class="skin-option" data-skin="skin6">
+                            <img src="/static/tokens/skin6.png" alt="Skin 6">
+                        </div>
+                        <!-- Skin 7 -->
+                        <div class="skin-option" data-skin="skin7">
+                            <img src="/static/tokens/skin7.png" alt="Skin 7">
+                        </div>
+                        <!-- Skin 8 -->
+                        <div class="skin-option" data-skin="skin8">
+                            <img src="/static/tokens/skin8.png" alt="Skin 8">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== SECTION JOUEUR 2 ===== -->
+                <div class="player-selection">
+                    <!-- Titre de la section joueur 2 -->
+                    <h3>Joueur 2</h3>
+
+                    <!-- Champ de saisie du pseudo -->
+                    <input type="text" id="player2Pseudo" class="pseudo-input"
+                           placeholder="Entrez votre pseudo..." maxlength="20">
+
+                    <!-- Message d'erreur (affiché si les pseudos sont identiques) -->
+                    <!--
+                        style="display: none" : caché par défaut
+                        JavaScript affichera ce message si nécessaire
+                    -->
+                    <div id="pseudoError" style="color: red; font-size: 0.9em; margin-top: 5px; display: none;">
+                        Les pseudos doivent être différents !
+                    </div>
+
+                    <!-- Grille des 8 skins disponibles pour le joueur 2 -->
+                    <!--
+                        Même structure que pour le joueur 1
+                        Les skins déjà choisis par le joueur 1 seront désactivés
+                        par JavaScript (classe "disabled")
+                    -->
+                    <div class="skin-options" id="player2Skins">
+                        <!-- Skin 1 -->
+                        <div class="skin-option" data-skin="skin1">
+                            <img src="/static/tokens/skin1.png" alt="Skin 1">
+                        </div>
+                        <!-- Skin 2 -->
+                        <div class="skin-option" data-skin="skin2">
+                            <img src="/static/tokens/skin2.png" alt="Skin 2">
+                        </div>
+                        <!-- Skin 3 -->
+                        <div class="skin-option" data-skin="skin3">
+                            <img src="/static/tokens/skin3.png" alt="Skin 3">
+                        </div>
+                        <!-- Skin 4 -->
+                        <div class="skin-option" data-skin="skin4">
+                            <img src="/static/tokens/skin4.png" alt="Skin 4">
+                        </div>
+                        <!-- Skin 5 -->
+                        <div class="skin-option" data-skin="skin5">
+                            <img src="/static/tokens/skin5.png" alt="Skin 5">
+                        </div>
+                        <!-- Skin 6 -->
+                        <div class="skin-option" data-skin="skin6">
+                            <img src="/static/tokens/skin6.png" alt="Skin 6">
+                        </div>
+                        <!-- Skin 7 -->
+                        <div class="skin-option" data-skin="skin7">
+                            <img src="/static/tokens/skin7.png" alt="Skin 7">
+                        </div>
+                        <!-- Skin 8 -->
+                        <div class="skin-option" data-skin="skin8">
+                            <img src="/static/tokens/skin8.png" alt="Skin 8">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== BOUTON DE DÉMARRAGE ===== -->
+                <!--
+                    id="startGame" : utilisé par JavaScript pour gérer le clic
+                    class="start-button" : styling CSS
+                    disabled : bouton désactivé par défaut
+
+                    Le bouton sera activé par JavaScript quand:
+                    - Les 2 joueurs ont choisi un skin
+                    - Les 2 joueurs ont saisi un pseudo
+                    - Les skins sont différents
+                    - Les pseudos sont différents
+                -->
+                <button id="startGame" class="start-button" disabled>Commencer la partie</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SCRIPT JAVASCRIPT EXTERNE ===== -->
+    <!--
+        Le fichier skins.js contient toute la logique de cette page:
+        - Gestion des événements de clic sur les skins
+        - Validation des pseudos en temps réel
+        - Désactivation des skins déjà choisis
+        - Activation/désactivation du bouton de démarrage
+        - Sauvegarde dans sessionStorage
+        - Redirection vers /game
+    -->
+    <script src="/js/skins.js"></script>
+</body>
+</html>

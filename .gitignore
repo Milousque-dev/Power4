@@ -1,0 +1,58 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs de code
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Fichiers temporaires
+*.tmp
+*.temp
+.cache/
+
+# Fichiers de sauvegarde
+*.bak
+*.backup
+*~
+
+# Node modules (si jamais utilisé)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Fichiers de build (si jamais utilisé)
+dist/
+build/
+*.min.js
+*.min.css
+
+# Environnement
+.env
+.env.local
+.env.*.local
+
+# Fichiers macOS
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Fichiers Windows
+$RECYCLE.BIN/
+*.lnk
+
+# Fichiers Linux
+.Trash-*
+.nfs*
