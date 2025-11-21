@@ -408,6 +408,13 @@ body.hard .cell {
     z-index: 1001;
 }
 
+.error-message {
+    color: #d32f2f;
+    font-size: 0.9em;
+    padding: 8px;
+    margin-bottom: 5px;
+}
+
 button {
     background: white;
     color: #667eea;
@@ -425,19 +432,19 @@ button {
 body.easy button {
     background: linear-gradient(135deg, #ff8c00, #ffa500);
     color: white;
-    box-shadow: 0 4px 6px rgba(255, 140, 0, 0.4);
+    box-shadow: 0 4px 6px rgba(85, 85, 85, 0.4);
 }
 
 body.normal button {
     background: linear-gradient(135deg, #00ff88, #00ffaa);
     color: #000;
-    box-shadow: 0 4px 6px rgba(0, 255, 136, 0.4);
+    box-shadow: 0 4px 6px rgba(85, 85, 85, 0.4);
 }
 
 body.hard button {
     background: linear-gradient(135deg, #ff69b4, #ffb6d9);
     color: white;
-    box-shadow: 0 4px 6px rgba(255, 105, 180, 0.4);
+    box-shadow: 0 4px 6px rgba(85, 85, 85, 0.4);
 }
 
 button:hover {
