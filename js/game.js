@@ -356,7 +356,7 @@ async function dropPiece(col) {
 function handleGameOver(state) {
     gameOver = true;
     const message = document.getElementById('message');
-
+    
     if (state.winner === 'draw') {
         // Cas d'égalité (plateau plein sans gagnant)
         message.textContent = '⚖️ Match nul ! ⚖️';

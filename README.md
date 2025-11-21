@@ -5,9 +5,9 @@ Un jeu de Puissance 4 interactif avec backend Go et frontend HTML/CSS/JavaScript
 ## 📋 Fonctionnalités
 
 ### 🎯 Modes de difficulté
-- **Facile** : Grille 6×7 avec thème orange
-- **Normal** : Grille 7×8 avec thème cyber vert
-- **Difficile** : Grille 8×9 avec thème anime rose/cyan
+- **Facile** : Grille 6×7 avec thème Megabonk orange
+- **Normal** : Grille 7×8 avec thème cyberfi vert
+- **Difficile** : Grille 8×9 avec thème Mathieu rose/cyan
 
 ### 🎨 Personnalisation
 - 8 skins de jetons différents
@@ -141,35 +141,12 @@ http://localhost:8080
 Dans `ui.js`, fonction `selectDifficulty()` :
 ```javascript
 case 'easy':
-    ROWS = 6;  // Lignes
-    COLS = 7;  // Colonnes
+    ROWS = 6;
+    COLS = 7;
 ```
 
 ### Changer les couleurs
 Dans `css/styles.css`, sections `body.easy`, `body.normal`, `body.hard`
-
-## 🐛 Résolution de problèmes
-
-**Les images ne s'affichent pas**
-- Vérifiez que le dossier `static/` existe
-
-**Le serveur ne démarre pas**
-- Vérifiez que le port 8080 est libre
-- Vérifiez que Go est installé : `go version`
-
-**Le jeu ne répond pas**
-- Ouvrez la console du navigateur (F12)
-- Vérifiez que le backend Go est lancé
-
-## 📝 Contraintes du projet
-
-Ce projet est un exercice académique avec la contrainte suivante :
-- ❌ **Interdiction** d'utiliser JavaScript pour la logique du jeu
-- ✅ **Obligation** d'utiliser Golang pour toute la logique métier
-- ✅ JavaScript uniquement pour l'interface utilisateur (UI/UX)
-
-**Résultat** : Séparation stricte Backend (Go) / Frontend (JS) via API REST.
-
 ---
 
 **Amusez-vous bien ! 🎮**

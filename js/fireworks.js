@@ -33,16 +33,16 @@ function createFireworks() {
      * @type {string[]} Tableau de codes couleur hexadécimaux pour les particules
      */
     const colors = [
-        '#ff0000',  // Rouge
-        '#00ff00',  // Vert
-        '#0000ff',  // Bleu
-        '#ffff00',  // Jaune
-        '#ff00ff',  // Magenta
-        '#00ffff',  // Cyan
-        '#ffa500',  // Orange
-        '#ff69b4',  // Rose
-        '#ffffff',  // Blanc
-        '#ff1493'   // Rose foncé
+        '#ff0000',
+        '#00ff00',
+        '#0000ff',
+        '#ffff00',
+        '#ff00ff',
+        '#00ffff',
+        '#ffa500',
+        '#ff69b4',
+        '#ffffff',
+        '#ff1493'
     ];
 
     //#endregion

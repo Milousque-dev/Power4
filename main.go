@@ -142,7 +142,7 @@ func main() {
 	}
 
 	// Log du démarrage
-	log.Printf("🎮 Serveur Puissance 4 démarré sur http://localhost:%s\n", port)
+	log.Printf(" Serveur Puissance 4 démarré sur http://localhost:%s\n", port)
 
 	// Démarrage du serveur HTTP
 	// Bloque jusqu'à une erreur fatale ou interruption

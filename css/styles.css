@@ -379,7 +379,13 @@ body.hard .cell {
     box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
 }
 
+#gameScreen {
+    display: flex;
+    flex-direction: column;
+}
+
 .message {
+    display: none;
     background: white;
     padding: 15px 30px;
     border-radius: 10px;
@@ -388,13 +394,13 @@ body.hard .cell {
     font-weight: bold;
     color: #333;
     min-height: 50px;
-    display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .message.winner {
+    display: block;
     background: #51cf66;
     color: white;
     animation: pulse 0.5s ease-in-out;
